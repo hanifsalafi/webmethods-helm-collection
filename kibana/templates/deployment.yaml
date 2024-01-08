@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: kibana
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+        - name: ELASTICSEARCH_URL
+          value: "elastic-service:9200"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 9405
+          name: 9405tcp
+          protocol: TCP
+        volumeMounts:
+        - name: kibana-master
+          mountPath: /usr/share/kibana/config/kibana.yml
+      volumes:
+      - name: kibana-master
+        hostPath:
+          path: /data/kibana/kibana.yml
+          type: File
+      #imagePullSecrets:
+      #- name: {{ .Values.image.pullSecrets }}

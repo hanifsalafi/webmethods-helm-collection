@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apigw-ingress
+spec:
+  rules:
+  - host: apigw.wmkube1.testing.com 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: apigateway-service
+            port:
+              number: 9072
+  - host: is.wmkube1.testing.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: apigateway-service
+            port:
+              number: 5555

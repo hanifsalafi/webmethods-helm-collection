@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: elasticsearch
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+        - name: bootstrap.memory_lock
+          value: "true"
+        - name: discovery.type
+          value: "single-node"
+        - name: xpack.security.enabled
+          value: "false"
+        - name: xpack.ml.enabled
+          value: "false"
+        - name: xpack.security.transport.ssl.enabled
+          value: "false"
+        - name: xpack.security.http.ssl.enabled
+          value: "false"
+        - name: action.destructive_requires_name
+          value: "false"
+        # - name: apigw_elasticsearch_hosts
+        #   value: "elasticsearch-service:9200"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 9200
+          name: 9200tcp
+          protocol: TCP
+        volumeMounts:
+        - name: elasticsearch-master
+          mountPath: /usr/share/elasticsearch/data
+        
+      volumes:
+      - name: elasticsearch-master
+        hostPath:
+          path: /data/elastic
+          type: Directory
+      #imagePullSecrets:
+      #- name: {{ .Values.image.pullSecrets }}

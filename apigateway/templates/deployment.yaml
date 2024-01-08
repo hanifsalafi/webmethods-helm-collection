@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: apigateway
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: apigateway
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+          - name: apigw_elasticsearch_hosts
+            value: "elastic-service:9200"
+          - name: apigw_kibana_dashboardInstance
+            value: "kibana-service:9405"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 5555
+          name: http1
+          protocol: TCP
+        - containerPort: 5480
+          name: http2
+          protocol: TCP
+        - containerPort: 9072
+          name: http3
+          protocol: TCP
+        - containerPort: 5443
+          name: https1
+          protocol: TCP
+        - containerPort: 5543
+          name: https2
+          protocol: TCP
+      imagePullSecrets:
+      - name: {{ .Values.image.pullSecrets }}
