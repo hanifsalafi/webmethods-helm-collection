@@ -42,11 +42,11 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  name: elasticsearch-service
+  name: kibana-service
   type: NodePort
-  port: 9240
 
 ingress:
+  name: kibana-ingress
   enabled: false
   className: ""
   annotations: {}

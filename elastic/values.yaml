@@ -44,9 +44,9 @@ securityContext: {}
 service:
   name: elasticsearch-service
   type: NodePort
-  port: 9240
 
 ingress:
+  name: elasticsearch-ingress
   enabled: false
   className: ""
   annotations: {}

@@ -4,17 +4,17 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
-    app: kibana
+    app: {{ .Chart.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: kibana
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: kibana
+        app: {{ .Chart.Name }}
     spec:
       containers:
       - name: {{ .Chart.Name }}

@@ -6,9 +6,8 @@ replicaCount: 1
 
 image:
   repository: wmkube2.testing.com/wm/is
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "apigw"
+  pullPolicy: IfNotPresent
   pullSecrets: harbor-registry-secret
 
 imagePullSecrets: []
@@ -42,10 +41,10 @@ securityContext: {}
 
 service:
   name: apigateway-service
-  type: ClusterIP
-  port: 80
+  type: NodePort
 
 ingress:
+  name: apigw-ingress
   enabled: false
   className: ""
   annotations: {}

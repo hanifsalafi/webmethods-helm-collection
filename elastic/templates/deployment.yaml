@@ -4,17 +4,17 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
-    app: elasticsearch
+    app: {{ .Chart.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: elasticsearch
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: elasticsearch
+        app: {{ .Chart.Name }}
     spec:
       containers:
       - name: {{ .Chart.Name }}
@@ -34,8 +34,6 @@ spec:
           value: "false"
         - name: action.destructive_requires_name
           value: "false"
-        # - name: apigw_elasticsearch_hosts
-        #   value: "elasticsearch-service:9200"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 9200

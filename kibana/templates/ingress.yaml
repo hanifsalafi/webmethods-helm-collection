@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: kibana-ingress
+  name: {{ .Values.ingress.name }}
 spec:
   rules:
   - host: kibana.wmkube1.testing.com 
@@ -11,6 +11,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: kibana-service
+            name: {{ .Values.service.name }}
             port:
               number: 9405
